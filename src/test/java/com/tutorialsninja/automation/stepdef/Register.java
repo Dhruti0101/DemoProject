@@ -36,16 +36,28 @@ public class Register {
 
 
 	@When("^I provide all the below valid details$")
-	public void i_provide_all_the_below_valid_details(DataTable datatable)  {
+	public void i_provide_all_the_below_valid_details(DataTable dataTable)  {
 		
-		RegisterPage.enterAllDetails(datatable);
+		RegisterPage.enterAllDetails(dataTable,"valid");
 		
+	}
+	
+	@When("^I provide the below duplicate details$")
+	public void i_provide_the_below_duplicate_details(DataTable dataTable) {
+	   
+		RegisterPage.enterAllDetails(dataTable,"duplicate");
 	}
 
 	@And("^I select the Privacy Policy$")
 	public void i_select_the_Privacy_Policy()  {
 	    
-		Elements.selectCheckBox(RegisterPage.privacyPolicy);
+		Elements.click(RegisterPage.privacyPolicy);
+	}
+	
+	@And("I subscribe to Newsletter")
+	public void i_subscribe_to_newsletter() {
+		
+	   Elements.click(RegisterPage.subscribed);
 	}
 
 	@And("^I click on Continue Button$")
@@ -59,5 +71,32 @@ public class Register {
 	    
 		Assert.assertTrue(Elements.isDisplayed(AccountSuccessPage.successBreadcrumb));
 	}
+	
+	@Then("I should see that the User account is not created")
+	public void i_should_see_that_the_user_account_is_not_created() {
+		
+		Assert.assertTrue(Elements.isDisplayed(RegisterPage.registerBreadcrumb));;
+	    
+	}
+	
+	@Then("I should see that the user is retricted from creating duplicate account")
+	public void i_should_see_that_the_user_is_retricted_from_creating_duplicate_account() {
+		
+		Assert.assertTrue(Elements.VerifyTextEquals(RegisterPage.mainWarning, "Warning: E-Mail Address is already registered!"));
+		
+	}
+	
+	@Then("I should see the error messages informing the User to fill the mandatory fields")
+	public void i_should_see_the_error_messages_informing_the_user_to_fill_the_mandatory_fields() {
+	   
+		Assert.assertTrue(Elements.isDisplayed(RegisterPage.firstNameWarning));
+		Assert.assertTrue(Elements.isDisplayed(RegisterPage.lastNameWarning));
+		Assert.assertTrue(Elements.isDisplayed(RegisterPage.emailWarning));
+		Assert.assertTrue(Elements.isDisplayed(RegisterPage.telephoneWarning));
+		Assert.assertTrue(Elements.isDisplayed(RegisterPage.passwordWarning));
+		Assert.assertTrue(Elements.isDisplayed(RegisterPage.mainWarning));;
+		
+	}
+
 
 }
